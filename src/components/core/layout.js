@@ -20,7 +20,7 @@ function getItem(label, key, icon, children) {
 
 const items = [
   getItem('首页', '', <AppstoreOutlined />),
-  getItem('数据管理', 'info', <DesktopOutlined />),
+  getItem('数据管理', 'data', <DesktopOutlined />),
   getItem('实验管理', 'lims', <UserOutlined />),
 ];
 
