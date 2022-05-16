@@ -7,9 +7,6 @@ import MoreReport from './components/core/moreReport'
 import MoreProject from './components/core/moreProject'
 import MoreResources from './components/core/moreResources'
 import Data from './components/views/data'
-import Sample from './components/views/sample'
-import Project from './components/views/data'
-import Experiment from './components/views/experiment'
 import MyLayout from './components/core/layout'
 import {WrapComps} from './components/helper/wrap'
 
@@ -28,9 +25,6 @@ const PathRoute=()=>{
                 <Route path="/more/project" element={<MoreProject/>}></Route>
                 <Route path="/more/resources" element={<MoreResources/>}></Route>
                 <Route path="/data" element={<Data/>}></Route>
-                <Route path="/sample" element={<Sample/>}></Route>
-                <Route path="/project" element={<Project/>}></Route>
-                <Route path="/experiment" element={<Experiment/>}></Route>
             </Routes>
             </MyLayout>
         </BrowserRouter>

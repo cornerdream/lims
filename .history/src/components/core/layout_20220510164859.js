@@ -20,11 +20,8 @@ function getItem(label, key, icon, children) {
 
 const items = [
   getItem('首页', '', <AppstoreOutlined />),
-  getItem('数据管理', 'data', <DesktopOutlined />,[
-    getItem('样本管理', 'sample'),
-    getItem('项目管理', 'project'),
-  ]),
-  getItem('实验管理', 'experiment', <UserOutlined />),
+  getItem('数据管理', 'data', <DesktopOutlined />),
+  getItem('实验管理', 'lims', <UserOutlined />),
 ];
 
 // let location = useLocation()

@@ -24,7 +24,7 @@ const items = [
     getItem('样本管理', 'sample'),
     getItem('项目管理', 'project'),
   ]),
-  getItem('实验管理', 'experiment', <UserOutlined />),
+  getItem('实验管理', 'lims', <UserOutlined />),
 ];
 
 // let location = useLocation()
