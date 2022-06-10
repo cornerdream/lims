@@ -1,0 +1,78 @@
+import Axios from 'axios'
+import {message} from 'antd'
+Axios.defaults.baseURL = import.meta.env.VITE_APP_BASEAPI
+
+// const redirectLogin = function redirectLogin(){
+//     this.props.navigate(`/signin`, { replace: true })
+// }
+Axios.defaults.timeout = 50000
+
+Axios.defaults.withCredentials = true
+
+let noTokenUrl = [
+    '/'
+]
+
+let exportUrl = '/export'
+let uploadUrl = '/upload'
+
+let statusCode = {
+    400:'请求参数错误',
+    401:'权限不足，请重新登录',
+    403:'服务器拒绝本次访问',
+    404:'请求资源未找到',
+    500:'服务器内部错误',
+    501:'服务器不支持该请求中使用的方法',
+    502:'网关错误',
+    504:'网关超时'
+}
+
+Axios.interceptors.request.use(config=>{
+    console.log(config)
+    if(noTokenUrl.indexOf(config.url)<0){
+        let token = localStorage.getItem('token')
+        token && (config.headers.Authorization = token)
+    }else{
+        config.headers.Authorization = ''
+    }
+    if(config.url.includes(exportUrl)){
+        config.headers['responseType'] = 'blob'
+    }
+    if(config.url.includes(uploadUrl)){
+        config.headers['Content-Type'] = 'multipart/form-data'
+    }
+    return config
+},error=>{
+    return Promise.reject(error)
+})
+
+Axios.defaults.validateStatus = status =>{
+    return /^(2|3)\d{2}$/.test(status)
+}
+
+Axios.interceptors.response.use(response=>{
+    console.log(response)
+    // return response
+    if(response.statusText == 'ok'){
+        return Promise.resolve(response.data)
+    }else{
+        message.error('响应超时')
+        return Promise.reject(response.data.message)
+    }
+},async error=>{
+    const {response} = error
+    if(response){
+        const {status,data} = response
+        let tips = status in statusCode ? statusCode[status] : data.message
+        message.error(tips)
+        if(status==401){
+            this.props.history.push('/signin')
+        }
+        return Promise.reject(error)
+    }else{
+        message.error('请求超时，请刷新重试')
+        return Promise.reject('请求超时，请刷新重试')
+    }
+})
+
+export default Axios

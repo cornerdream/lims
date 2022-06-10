@@ -1,0 +1,2 @@
+NODE_ENV = 'DEVELOPMENT'
+VITE_APP_BASEAPI = 'http://localhost:8888'
