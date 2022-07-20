@@ -1,7 +1,7 @@
 import {authReducer} from './auth.reducers'
 import { combineReducers } from "redux"
-
-const createRootReducer = () =>
+import { connectRouter } from 'connected-react-router';
+const createRootReducer = (history) =>
   combineReducers({
     auth: authReducer
   })

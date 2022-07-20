@@ -1,6 +1,7 @@
 import { useNavigate, useParams,useLocation} from "react-router-dom";
 
 const WrapComps = (props)=> {
+  console.log(props)
   let navigate = useNavigate();
   let params = useParams();
   let Element = props.el
@@ -9,7 +10,10 @@ const WrapComps = (props)=> {
 
 const withNavigation = (Component) => {
 
-    return (props) => <Component {...props} navigate={useNavigate()} params={useParams()} href={useLocation()}/>;
+    return (props) => {
+      console.log(props)
+      return <Component {...props} navigate={useNavigate()} params={useParams()} href={useLocation()}/>
+    };
 };
 
 export {

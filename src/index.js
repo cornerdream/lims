@@ -8,21 +8,14 @@ import reportWebVitals from './reportWebVitals';
 import 'antd/dist/antd.css';
 import './index.css';
 
-// import ReactDOM from "react-dom"
-import {BrowserRouter} from 'react-router-dom'
-import MyLayout from './components/core/layout';
-import PathRoute from './router';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  
-    {/* <PathRoute /> */}
-    {/* <Layout>
-        <PathRoute />
-      </Layout> */}
-  </React.StrictMode>
-);
+// root.render(
+  // <React.StrictMode>
+//     {/* <App /> */}
+  // </React.StrictMode>
+// );//组件加载两次
+root.render(<App />);
 // ReactDOM.render(
 //   <MyLayout>
 //     <PathRoute />
@@ -32,4 +25,4 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();
+reportWebVitals(console.log);//网站性能指标

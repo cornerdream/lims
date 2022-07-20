@@ -2,7 +2,9 @@ import React, { Component, useState } from 'react';
 import { Card } from 'antd';
 import {Link} from 'react-router-dom'
 
-  
+import {getOrderChart} from '../../api/order_chart'
+import OrderChart from './order_chart';
+
 
 
 const cardTitle=[
@@ -11,11 +13,11 @@ const cardTitle=[
         title:'订单',
         list:[
             {
-                key:'1',
+                key:'order-number',
                 tab:'数量'
             },
             {
-                key:'2',
+                key:'order-unusual',
                 tab:'异常'
             }
         ]
@@ -25,11 +27,11 @@ const cardTitle=[
         title:'样本',
         list:[
             {
-                key:'1',
+                key:'sample-number',
                 tab:'数量'
             },
             {
-                key:'2',
+                key:'sample-unusal',
                 tab:'异常'
             }
         ]
@@ -39,11 +41,11 @@ const cardTitle=[
         title:'报告',
         list:[
             {
-                key:'1',
+                key:'report-number',
                 tab:'数量'
             },
             {
-                key:'2',
+                key:'report-unusual',
                 tab:'异常'
             }
         ]
@@ -53,11 +55,11 @@ const cardTitle=[
         title:'项目',
         list:[
             {
-                key:'1',
+                key:'project-number',
                 tab:'数量'
             },
             {
-                key:'2',
+                key:'project-unusual',
                 tab:'异常'
             }
         ]
@@ -67,11 +69,11 @@ const cardTitle=[
         title:'资源',
         list:[
             {
-                key:'1',
+                key:'resource-number',
                 tab:'数量'
             },
             {
-                key:'2',
+                key:'resource-unusual',
                 tab:'异常'
             }
         ]
@@ -82,15 +84,35 @@ class Home extends Component{
     constructor(props){
         super(props)
         this.state={
-            activeTabKey1:'1'
+            activeTabKey:'order-number',
+            activeTabKeyorder:'order-number',
+            activeTabKeysample:'sample-number',
+            activeTabKeyreport:'report-number',
+            activeTabKeyproject:'project-number',
+            activeTabKeyresource:'resource-number',
+            orderChart:[],
         }
     }
-    onTab1Change = key => {
-        console.log(key)
-        this.setState({key});
-    };
 
+    onTab1Change = (key,id) => {
+        console.log(key,id)
+        this.setState({
+            ['activeTabKey'+id]:key
+        });
+    };
+    
+    componentDidMount(){
+        console.log('home mount')
+        getOrderChart().then(res=>{
+            console.log(res)
+            this.setState({
+                orderChart:res.order_chart
+            })
+        })
+
+    }
     render(){
+        const {orderChart} = this.state
         return (
             <>
                  home
@@ -103,14 +125,17 @@ class Home extends Component{
                             title={item.title}
                             extra={<Link to={`/more/${item.id}`} state={{more:item.id}}>More</Link>}
                             tabList={item.list}
-                            activeTabKey={this['activeTabKey'+(i+1)]}
-                            onTabChange={key=>{this.onTab1Change(key)}}
+                            activeTabKey={this.state['activeTabKey'+(item.id)]}
+                            onTabChange={(key)=>this.onTab1Change(key,item.id)}
                             >
-
+                                {this.state['activeTabKey'+(item.id)]==='order-number'?<OrderChart data={orderChart}></OrderChart>:<p>content</p>}
+                                
                             </Card>
                         )
                     })
+
                 }
+            
             </>
         )
     }

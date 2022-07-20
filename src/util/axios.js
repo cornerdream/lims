@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import {message} from 'antd'
 import baseUrl from './baseUrl'
-
+import qs from 'qs'
 // Axios.defaults.baseURL = import.meta.env.VITE_APP_BASEAPI
 // Axios.defaults.baseURL = process.env.VITE_APP_BASEAPI
 // Axios.defaults.baseURL = 'http://192.168.1.203:8888'
@@ -11,13 +11,13 @@ Axios.defaults.baseURL = baseUrl
 // }
 // Axios.defaults.timeout = 50000
 
-Axios.defaults.withCredentials = true
+// Axios.defaults.withCredentials = true//后台的'Access-Control-Allow-Origin': '*', 没法设置
 
 let noTokenUrl = [
     '/'
 ]
 
-let exportUrl = '/export'
+let exportUrl = '/download'
 let uploadUrl = '/upload'
 
 let statusCode = {
@@ -40,7 +40,7 @@ Axios.interceptors.request.use(config=>{
         // token && (config.headers.Authorization = token)
         token && (config.headers.Authorization = 'Bearer '+token)
     }else{
-        config.headers.Authorization = ''
+        config.headers.Authorization = '';
     }
     // let token = localStorage.getItem("token")||''
     // config.headers.Authorization = ('Bearer '+token)||''
@@ -50,7 +50,8 @@ Axios.interceptors.request.use(config=>{
     if(config.url.includes(uploadUrl)){
         config.headers['Content-Type'] = 'multipart/form-data'
     }
-    console.log(config)
+    // config.data = qs.stringify(config.data)
+    // console.log(config)
     return config
 },error=>{
     return Promise.reject(error)
@@ -63,12 +64,12 @@ Axios.defaults.validateStatus = status =>{
 Axios.interceptors.response.use(response=>{
     console.log(response)
     // return response
-    if(response.statusText == 'OK'){
+    // if(response.statusText == 'OK'){
         return Promise.resolve(response.data)
-    }else{
-        message.error('响应超时')
-        return Promise.reject(response.data.message)
-    }
+    // }else{
+    //     message.error('响应超时')
+    //     return Promise.reject(response.data.message)
+    // }
 },async error=>{
     console.log(error)
     const {response} = error

@@ -6,8 +6,6 @@ class MoreOrder extends Component{
     constructor(props){
         super(props)
         console.log(props)
-        console.log(this)
-        console.log(this.props.location)
         this.state={
             breadItem:['Home',props.href.state.more]
         }

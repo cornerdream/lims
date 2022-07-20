@@ -1,11 +1,13 @@
 import React ,{Component, useState} from "react";
 
-import { Timeline } from "antd";
+import { Breadcrumb,Timeline } from "antd";
 
 class Time extends Component{
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
+        console.log(props)
         this.state={
+            // breadItem:['data-table',props.href.state.code],
             mode:'left',
             data:[
                 {
@@ -27,9 +29,18 @@ class Time extends Component{
         }
     }
     render(){
-        const {mode,data} =this.state
+        const {breadItem,mode,data} =this.state
         return (
             <>
+             {/* <Breadcrumb
+                    style={{
+                    margin: '16px 0',
+                    }}
+                >
+                    {breadItem.map(item=>{
+                        return <Breadcrumb.Item key={item} onClick={()=>this.onBreadItem(item)}>{item}</Breadcrumb.Item>
+                    })}
+             </Breadcrumb>    */}
              <Timeline mode={mode}>
                 {data.map(item=>{
                     return <Timeline.Item label={item.label} color={item.color} key={item.label}><p>{item.title}</p></Timeline.Item>

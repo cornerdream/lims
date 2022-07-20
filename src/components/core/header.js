@@ -1,11 +1,11 @@
-import React ,{Component,useState,useEffect}from 'react';
+import React ,{Component}from 'react';
 import {BellOutlined} from '@ant-design/icons';
-import { Layout,Row,Col,Badge,Button} from 'antd';
-import {useNavigate} from 'react-router-dom'
+import { Layout,Row,Col,Badge,Button, message} from 'antd';
+
 import store from '../../store';
 import {withNavigation} from '../helper/wrap'
 import { signout } from "../../store/actions/auth.actions"
-import { useDispatch, useSelector } from "react-redux"
+
 const { Header} = Layout;
 // const MyHeader=()=>{
 //     const {signin} = store.getState()
@@ -18,7 +18,7 @@ const { Header} = Layout;
 //         return date
 //     }
 //     let date = getDate()
-//     const [username] = useState('')
+    // const [username] = useState('')
 //     const [time,setTime] = useState(date)
 //     useEffect(()=>{
 //         const timer=setInterval(()=>{
@@ -65,10 +65,10 @@ class MyHeader extends Component{
         super(props)
         console.log(props)
         this.state={
-            // ...store.getState(),
             collapsed: false,
             username:localStorage.getItem('name')||'',
-            time:'',
+            time:new Date(),
+            day:new Date().getDay(),
             timer:null,
             weeks:["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
         }
@@ -77,60 +77,61 @@ class MyHeader extends Component{
     }
     
     getDate=()=>{
-        let {weeks} = this.state
-        const now = new Date()
-        const date=now.getFullYear()+'-'+now.getMonth()+'-'+now.getDate()+' '+now.getHours()+':'+now.getMinutes()+':'+now.getSeconds()+' '+weeks[now.getDay()]
-        // return date
+        const now = new Date();
         this.setState({
-            time:date
+            time:now,
+            day:now.getDay()
         })
+    }
+    onSignup=()=>{
+        // store.subscribe(() => {
+        //     const state = store.getState()
+        //     console.log(state)
+        //     this.setState({
+        //         username:state.auth.name
+        //     })
+        //     this.props.getChild(this.state.username)
+
+            
+        // })
+        this.props.navigate(`/signup`, { replace: true })
     }
     onSignin=()=>{
         store.subscribe(() => {
-            console.log('state状态改变了')
-            console.log(store.getState())
             const state = store.getState()
             console.log(state)
-          
             this.setState({
                 username:state.auth.name
             })
             this.props.getChild(this.state.username)
-
-            
         })
-        // const state = store.getState()
-        // const username = useSelector(state => state.auth.name)
-
-        // let {username} = this.state
-        // if(username){
-        //     this.setState({
-        //         username
-        //     })
-        //     this.props.getChild(username)
-        // }
         this.props.navigate(`/signin`, { replace: true })
     }
     onSignout=()=>{
         store.dispatch(signout({token:'',name:''}))
-        
         this.setState({
             username:''
         })
         this.props.getChild('')   
         this.props.navigate(`/`, { replace: true })
     }
-    componentDidMount(){ 
-        // console.log(this)
-        // this.getDate()
-        // this.timer = setInterval(() => { 
-        //     let date = this.getDate()
-        //     this.setState({ 
-        //         time: date
-        //     })
-        // }, 1000);
-        this.timer = setInterval(()=>this.getDate(),1000)
-        
+    componentDidMount(){
+        store.subscribe(() => {
+            const state = store.getState()
+            console.log(state)
+            if(state.auth.name){
+                console.log('username')
+                this.setState({
+                    username:state.auth.name
+                })
+                
+            }else{
+                console.log('message')
+                message.info(state.auth.message)
+            }
+            
+        }) 
+        this.timer = setInterval(()=>this.getDate(),1000)   
     }
     componentWillUnmount() { 
         if (this.timer != null) { 
@@ -138,10 +139,8 @@ class MyHeader extends Component{
         }
     }
     render(){
-        
-
-        let {time,username} = this.state
-
+        let {time,username,weeks,day} = this.state
+        // console.log(time,username,weeks,day)
         return (
 
             <Header
@@ -160,8 +159,9 @@ class MyHeader extends Component{
                     <Col flex={1}>
                     { username?<p>欢迎您，{username}<Button type='text' onClick={this.onSignout}>signout</Button></p>:<Button type='text' onClick={this.onSignin}>signin</Button>}
                     </Col>
-                    {username?null:<Col flex={1}>signup</Col>}
-                    {time}
+                    {username?null:<Col flex={1}><Button type='text' onClick={this.onSignup}>signup</Button></Col>}
+                    {/* {time} */}
+                    {time.toLocaleString()+' '+weeks[day]}
                 </Row>
             </Header>
     

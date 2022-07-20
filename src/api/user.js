@@ -14,10 +14,13 @@ export const login = (data)=>{
 
 export const register = (data)=>{
     console.log(data)
+    const param = {
+        user:data
+    }
     return Axios({
         method:'post',
         url:'/api/users',
-        data
+        data:param
     })
 }
 
@@ -36,5 +39,12 @@ export const updateUser = (data)=>{
         method:'put',
         url:'/api/user',
         data
+    })
+}
+
+export const getCode = ()=>{
+    return Axios({
+        method:'get',
+        url:'/api/code'
     })
 }
